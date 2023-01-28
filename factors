@@ -38,7 +38,7 @@ then
         exit 1
 else
 
-        while read -r i
+        while read i
         do
 
                 result=$(factor "$i")
