@@ -11,7 +11,7 @@ check_factor()
                 do
                         if [ $count -gt 1 ];
                         then
-                                num2=$(echo "$a$num2" | bc)
+                                num2=$(echo "$a"$num2 | bc)
                         fi
                         count=$((count + 1))
                 done
