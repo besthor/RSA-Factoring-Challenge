@@ -1,0 +1,17 @@
+def factorize(n):
+
+    for i in range(2, int(n**0.5) + 1):
+
+        if n % i == 0:
+
+            return i, n//i
+
+    return n, 1
+
+
+
+n = 4958
+
+p, q = factorize(n)
+
+print(f"{n} = {p} * {q}")
