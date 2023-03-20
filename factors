@@ -3,7 +3,7 @@
 
 check_factor() {
     if [ $# -ne 1 ]; then
-        echo "Usage: check_factor <number>"
+        printf "Usage: check_factor <number>\n"
         exit 1
     fi
 
@@ -11,7 +11,7 @@ check_factor() {
     factors_array=(${factors//[^0-9]/ })
 
     if [ ${#factors_array[@]} -eq 1 ]; then
-        echo "$1=1*$1"
+        printf "%s=1*%s\n" "$1" "$1"
     else
         max_factor=${factors_array[-1]}
         second_max_factor=${factors_array[-2]}
@@ -26,12 +26,12 @@ check_factor() {
             done
         fi
 
-        echo "$1=$max_factor*$second_max_factor"
+        printf "%s=%s*%s\n" "$1" "$max_factor" "$second_max_factor"
     fi
 }
 
 if [ $# -ne 1 ]; then
-    echo 'Usage: factors <file>'
+    printf 'Usage: factors <file>\n'
     exit 1
 else
     while read -r number; do
