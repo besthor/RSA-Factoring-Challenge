@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+import sys
+
+def factorize(num):
+    """
+    Returns a list of tuples representing all the possible factorizations of the given number
+    into two smaller numbers (excluding 1 and the number itself).
+    """
+    factors = []
+    for i in range(2, int(num**0.5)+1):
+        if num % i == 0:
+            factors.append((i, num // i))
+    return factors
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: {} <file>".format(sys.argv[0]))
+        sys.exit(1)
+
+    filename = sys.argv[1]
+    with open(filename, 'r') as f:
+        for line in f:
+            num = int(line.strip())
+            factorizations = factorize(num)
+            for factorization in factorizations:
+                print("{}={}*{}".format(num, factorization[0], factorization[1]))
