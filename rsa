@@ -3,14 +3,14 @@
 check_factor() {
     if [ $# -ne 1 ]; then
         args=("$@")
-        num1=1
-        num2=1
-        for a in "${args[@]}"; do
-            if [ "$a" -gt "$num1" ]; then
+        num1=0
+        num2=0
+        for ((i = 0; i < ${#args[@]}; i++)); do
+            if (( ${args[i]} > num1 )); then
                 num2=$num1
-                num1=$a
-            elif [ "$a" -gt "$num2" ]; then
-                num2=$a
+                num1=${args[i]}
+            elif (( ${args[i]} > num2 )); then
+                num2=${args[i]}
             fi
         done
     else
@@ -18,9 +18,7 @@ check_factor() {
         num2=1
     fi
 
-    num=$(echo "$num1 * $num2" | bc)
-
-    echo "${num1}:${num2}=${num}"
+    echo "${num1}:${num2}=$((num1*num2))"
 }
 
 if [ $# -ne 1 ]; then
@@ -29,6 +27,6 @@ if [ $# -ne 1 ]; then
 else
     while read -r i; do
         result=$(factor "$i")
-        check_factor ${result[@]}
+        check_factor $(echo "$result" | awk '{print $(NF-1),$NF}')
     done < "$1"
 fi
