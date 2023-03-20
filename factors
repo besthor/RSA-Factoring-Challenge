@@ -7,25 +7,22 @@ check_factor() {
         exit 1
     fi
 
-    factors=$(factor "$1" | awk '{$1=""; print $0}' | sed 's/ //g')
+    factors=$(factor "$1" | cut -d' ' -f2-)
     factors_array=($factors)
 
-    if [ ${#factors_array[@]} -eq 1 ]; then
+    if [ ${#factors_array[@]} -le 2 ]; then
         echo "$1=1*$1"
     else
         max_factor=${factors_array[-1]}
         second_max_factor=${factors_array[-2]}
 
-        if [ ${#factors_array[@]} -gt 2 ]; then
-            for ((i=${#factors_array[@]}-3; i>=0; i--)); do
-                if [ $(echo "${factors_array[$i]}*$second_max_factor" | bc) -gt $(echo "$max_factor*${
-factors_array[$i+1]}" | bc) ]; then
-                    break
-                fi
+        for ((i=${#factors_array[@]}-1; i>=0; i--)); do
+            if [ $((factors_array[i]*second_max_factor)) -gt $((max_factor*factors_array[i+1])) ]; then
+                break
+            fi
 
-                second_max_factor=${factors_array[$i]}
-            done
-        fi
+            second_max_factor=${factors_array[i]}
+        done
 
         echo "$1=$max_factor*$second_max_factor"
     fi
@@ -33,6 +30,9 @@ factors_array[$i+1]}" | bc) ]; then
 
 if [ $# -ne 1 ]; then
     echo 'Usage: factors <file>'
+    exit 1
+elif ! [ -f "$1" ] || ! [ -r "$1" ]; then
+    echo "Error: $1 cannot be opened or read"
     exit 1
 else
     while read -r number; do
